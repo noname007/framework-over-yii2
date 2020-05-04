@@ -1,5 +1,7 @@
 <?php
 
+use app\modules\api\filters\LogHttpReqRes;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -11,10 +13,25 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+
+    'language' =>'zh-CN',
+    'timezone' => 'prc',
+
+    #'runtimePath' => '',
+    #'catchAll' => '',
+
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'wjCjEb3iI72RfsU8f8zYeWydytfIRJjC',
+            'cookieValidationKey' => '',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+                'text/json' => 'yii\web\JsonParser',
+            ],
+        ],
+
+        'response' => [
+            'class' => 'yii\web\Response',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -38,20 +55,33 @@ $config = [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'logVars' => [],
+                    'levels' => ['error', 'warning', 'info', 'trace', 'profile'],
+//                    'logFile' => '',
+                    'maxFileSize' => 1024*1024*512, //512M
+                    'maxLogFiles' => 100,
+                    'rotateByCopy' => false,
+                    'enableRotation' => true,
                 ],
             ],
         ],
         'db' => $db,
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
     ],
+
+    'modules' => [
+        'api' => [
+            'class' => 'app\modules\api\Module',
+            'as api_log' => LogHttpReqRes::class,
+        ],
+    ],
+
     'params' => $params,
 ];
 
