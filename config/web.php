@@ -52,6 +52,7 @@ $config = [
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
+            'flushInterval' => 1000,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
@@ -62,6 +63,7 @@ $config = [
                     'maxLogFiles' => 100,
                     'rotateByCopy' => false,
                     'enableRotation' => true,
+                    'exportInterval' => 1,
                 ],
             ],
         ],
